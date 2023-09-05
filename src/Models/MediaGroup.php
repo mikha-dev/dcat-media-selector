@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MediaGroup extends Model
 {
-    protected $table = 'media_group';
+    protected $table = 'admin_media_group';
 
     public $timestamps = false;
 

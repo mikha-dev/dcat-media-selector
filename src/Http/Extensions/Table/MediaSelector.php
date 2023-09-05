@@ -28,7 +28,7 @@ class MediaSelector extends LazyRenderable
 
             $grid->column('path')->image();
 
-            $grid->column('file_name', '名称');
+            $grid->column('file_name', 'Name');
 
         });
     }

@@ -11,14 +11,14 @@ class MediaSelector extends Field
     protected $view = 'dcat-media-selector::index';
 
     protected static $selectList = [
-        'image'      => '图片',
-        'video'      => '视频',
-        'audio'      => '音频',
-        'powerpoint' => '文稿',
-        'code'       => '代码',
-        'zip'        => '压缩包',
-        'text'       => '文本选择',
-        'other'      => '其它',
+        'image'      => 'Image',
+        'video'      => 'Video',
+        'audio'      => 'Audio',
+        'powerpoint' => 'Powerpoint',
+        'code'       => 'Code',
+        'zip'        => 'Zip',
+        'text'       => 'Text',
+        'other'      => 'Other',
     ];
 
     /*

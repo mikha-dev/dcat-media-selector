@@ -24,7 +24,7 @@ class GroupController
 
         $model = MediaGroup::query()->where(['name' => $request->get('name')])->first();
         if ($model)
-            return $this->failed('分组名已存在');
+            return $this->failed('Group name already exists');
 
         $id = MediaGroup::query()->insertGetId(['admin_id' => Admin::user()->id, 'name' => $request->get('name'), 'created_at' => time()]);
 
@@ -43,11 +43,11 @@ class GroupController
 
         $model = MediaGroup::query()->find($request->get('id'));
         if (!$model)
-            return $this->failed('分组不存在');
+            return $this->failed('Group does not exist');
 
         $is = MediaGroup::query()->where('id', '<>', $request->get('id'))->where(['name' => $request->get('name')])->first();
         if ($is)
-            return $this->failed('分组名已存在');
+            return $this->failed('Group name already exists');
 
         $model->update(['name' => $request->get('name'), 'updated_at' => time()]);
 
@@ -65,7 +65,7 @@ class GroupController
 
         $model = MediaGroup::query()->find($request->get('id'));
         if (!$model)
-            return $this->failed('分组不存在');
+            return $this->failed('Group does not exist');
 
         if ($model->delete()) {
             Media::query()->where('media_group_id', $request->get('id'))->update(['media_group_id' => 0, 'updated_at' => time()]);

@@ -15,7 +15,6 @@ class MediaController
 {
     use ApiResponse;
 
-    // 媒体列表
     public function list()
     {
         $keyword = request('keyword');
@@ -45,7 +44,7 @@ class MediaController
         foreach ($list as $value) {
             $dataList[] = array(
                 'id'               => $value->id,
-                'media_group_name' => $value->mediaGroup->name ?? '无',
+                'media_group_name' => $value->mediaGroup->name ?? 'None',
                 'media_type'       => $value->type,
                 'path'             => $value->path,
                 'url'              => Storage::disk(config('admin.upload.disk'))->url($value->path),
@@ -59,7 +58,6 @@ class MediaController
         return json_encode(["total" => $list->total(), "data" => $dataList], JSON_UNESCAPED_UNICODE);
     }
 
-    // 上传
     public function upload(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -106,7 +104,7 @@ class MediaController
 
         return $result
             ? $this->success(['name' => Helper::basename($path), 'path' => $path, 'media_type' => $type, 'url' => $disk->url($path)])
-            : $this->failed('上传失败');
+            : $this->failed('Upload failed');
     }
 
     public function delete(Request $request)

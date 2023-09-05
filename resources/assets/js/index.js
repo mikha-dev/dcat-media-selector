@@ -37,7 +37,7 @@
                     var isUpload = true;
 
                     if (config.limit > 1 && _this.getFileNumber() + 1 > config.limit) {
-                        Dcat.error('对不起，已超出文件数量限制');
+                        Dcat.error('Sorry, the file limit has been exceeded');
                         return false;
                     }
 
@@ -46,7 +46,7 @@
                         var suffix = row.name.substring(row.name.lastIndexOf('.') + 1);
 
                         if ($.inArray(getFileType(suffix), config.types) < 0) {
-                            Dcat.error('对不起，不允许选择此类型文件');
+                            Dcat.error('Sorry, this type of file is not allowed');
                             isUpload = false;
                             return false;
                         }
@@ -139,7 +139,7 @@
 
                 $.ajax({
                     type: 'post', // 提交方式 get/post
-                    url: '/admin/media-selector/m-upload', // 需要提交的 url
+                    url: '/media-selector/m-upload', // 需要提交的 url
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -216,24 +216,24 @@
             $.contextMenu({
                 selector: '.media_selector_media_group .menu',
                 items: {
-                    edit: {name: '编辑', icon: 'edit'},
-                    delete: {name: '删除', icon: 'delete'},
+                    edit: {name: 'Edit', icon: 'edit'},
+                    delete: {name: 'Delete', icon: 'delete'},
                 },
                 callback: function (key, options) {
                     if (key === 'edit') {
                         layer.prompt({
-                            title: '编辑',
+                            title: 'Edit',
                             maxmin: false,
                             value: options.$trigger.html(),
                         }, function (value, index) {
                             $.ajax({
                                 type: 'POST',
-                                url: '/admin/media-selector/g-edit',
+                                url: '/media-selector/g-edit',
                                 data: {id: options.$trigger.data('id'), name: value},
                                 datatype: 'jsonp',
                                 success: function () {
                                     options.$trigger.html(value);
-                                    Dcat.success('更新成功');
+                                    Dcat.success('Update completed');
                                     layer.close(index);
                                 },
                                 error: function (XmlHttpRequest) {
@@ -242,15 +242,15 @@
                             });
                         });
                     } else if (key === 'delete') {
-                        Dcat.confirm('确认删除?', options.$trigger.html(), function () {
+                        Dcat.confirm('Confirm deletion?', options.$trigger.html(), function () {
                             $.ajax({
                                 type: 'POST',
-                                url: '/admin/media-selector/g-delete',
+                                url: '/media-selector/g-delete',
                                 data: {id: options.$trigger.data('id')},
                                 datatype: 'jsonp',
                                 success: function () {
                                     options.$trigger.remove();
-                                    Dcat.success('删除成功');
+                                    Dcat.success('Successfully deleted');
                                 },
                                 error: function (XmlHttpRequest) {
                                     Dcat.error(XmlHttpRequest.responseJSON.message);
@@ -262,7 +262,7 @@
             });
 
             $('.media_selector_table').bootstrapTable('destroy').bootstrapTable({
-                url: '/admin/media-selector/m-list',
+                url: '/media-selector/m-list',
                 toolbar: '.media_selector_toolbar', // 工具按钮用哪个容器
                 dataField: 'data',
                 classes: 'table table-collapse custom-data-table',
@@ -275,28 +275,28 @@
                     {checkbox: true},
                     {field: 'id', title: 'ID', sortable: true, visible: false},
                     {
-                        title: '预览', formatter: function (value, row) {
+                        title: 'Preview', formatter: function (value, row) {
                             var html = '<a href="' + row.url + '" title="' + row.name + '" target="_blank">';
                             html += fileDisplayHtml(row);
                             html += '</a>';
                             return html;
                         }
                     },
-                    {field: 'media_group_name', title: '分组'},
-                    {field: 'size', title: '大小'},
-                    {field: 'file_ext', title: '后缀'},
-                    {field: 'media_type', title: '类型'},
+                    {field: 'media_group_name', title: 'Group'},
+                    {field: 'size', title: 'Size'},
+                    {field: 'file_ext', title: 'File Ext.'},
+                    {field: 'media_type', title: 'Media Type'},
                     {
-                        field: 'operate', title: '操作', width: '50%',
+                        field: 'operate', title: 'Choose', width: '50%',
                         events: {
                             'click .choose': function (e, value, row) {
                                 if ($.inArray(row.media_type, config.types) < 0) {
-                                    Dcat.error('对不起，不允许选择此类型文件');
+                                    Dcat.error('This type of file is not allowed');
                                     return false;
                                 }
 
                                 if (config.limit > 1 && _this.getFileNumber() + 1 > config.limit) {
-                                    Dcat.error('对不起，已超出文件数量限制');
+                                    Dcat.error('Еhe file limit has been exceeded');
                                     return false;
                                 }
 
@@ -328,7 +328,7 @@
                         $.each(row, function (i, field) {
                             btselectarr.push(field.id);
                         });
-                        toolbarMore.find(' .selected').html('已选择' + row.length + '项');
+                        toolbarMore.find(' .selected').html('chosen' + row.length + 'item');
                         toolbarMore.show();
                     }
                 },
@@ -339,7 +339,7 @@
                 onCheck: function (row) { // 点击每一个单选框时触发的操作
                     btselectarr.push(row.id);
                     if (btselectarr.length >= 1) {
-                        toolbarMore.find(' .selected').html('已选择' + btselectarr.length + '项');
+                        toolbarMore.find(' .selected').html('Chosen' + btselectarr.length + 'item');
                         toolbarMore.show();
                     }
                 },
@@ -348,7 +348,7 @@
                     if (index > -1) {
                         btselectarr.splice(index, 1);
                     }
-                    toolbarMore.find(' .selected').html('已选择' + btselectarr.length + '项');
+                    toolbarMore.find(' .selected').html('Chosen' + btselectarr.length + 'item');
                     if (btselectarr.length <= 0) {
                         toolbarMore.hide();
                     }
@@ -357,18 +357,18 @@
 
             $('.media_selector_add_group').on('click', function () {
                 layer.prompt({
-                    title: '添加',
+                    title: 'Add to',
                     maxmin: false,
                 }, function (value, index) {
                     $.ajax({
                         type: 'POST',
-                        url: '/admin/media-selector/g-add',
+                        url: '/media-selector/g-add',
                         data: {name: value},
                         datatype: 'jsonp',
                         success: function (data) {
                             layer.close(index);
                             $('.media_selector_media_group').append('<a class="list-group-item list-group-item-action menu" data-toggle="list" data-id="' + data.data + '" href="javascript:;">' + value + '</a>');
-                            Dcat.success('添加成功');
+                            Dcat.success('Added successfully');
                         },
                         error: function (XmlHttpRequest) {
                             Dcat.error(XmlHttpRequest.responseJSON.message);
@@ -385,7 +385,7 @@
             $('.media_selector_type').select2({allowClear: true, minimumInputLength: 0});
 
             $('.media_selector_batch_delete').click(function () {
-                Dcat.confirm('确认删除?', null, function () {
+                Dcat.confirm('Confirm deletion?', null, function () {
                     Dcat.loading();
                     var deleteId = [], deletePaths = [];
                     var rows = $('.media_selector_table').bootstrapTable('getSelections');
@@ -396,12 +396,12 @@
                     });
                     $.ajax({
                         type: 'POST',
-                        url: '/admin/media-selector/m-delete',
+                        url: '/media-selector/m-delete',
                         data: {delete_ids: deleteId, delete_paths: deletePaths},
                         datatype: 'jsonp',
                         success: function () {
                             Dcat.loading(false);
-                            Dcat.success('删除成功');
+                            Dcat.success('Successfully deleted');
                             $('.media_selector_toolbar_refresh').click();
                         },
                         error: function (XmlHttpRequest) {
@@ -419,22 +419,22 @@
                     moveId.push(row.id);
                 });
                 layer.open({
-                    title: '移动',
+                    title: 'Move',
                     type: 1,
                     shadeClose: true,
                     maxmin: false,
                     move: false,
                     area: ['275px', '200px'],
-                    btn: ['确定', '取消'],
+                    btn: ['Ok', 'Cancel'],
                     content: _this.groupSelect(),
                     yes: function (index) {
                         $.ajax({
                             type: 'POST',
-                            url: '/admin/media-selector/m-move',
+                            url: '/media-selector/m-move',
                             data: {group_id: $('#media_selector_group_id').val(), move_ids: moveId.join(',')},
                             datatype: 'jsonp',
                             success: function () {
-                                Dcat.success('移动成功');
+                                Dcat.success('Succesfully moved');
                                 Dcat.loading(false);
                                 $('.media_selector_toolbar_refresh').click();
                             },
@@ -471,7 +471,7 @@
                 }
 
                 if (_this.getFileNumber() + rows.length > config.limit) {
-                    Dcat.error('对不起，已超出文件数量限制');
+                    Dcat.error('File limit has been exceeded');
                     return false;
                 }
 
@@ -484,7 +484,7 @@
                 });
 
                 if (!result) {
-                    Dcat.error('对不起，不允许选择此类型文件');
+                    Dcat.error('This type of file is not allowed');
                     return false;
                 }
                 $.each(rows, function (i, row) {
@@ -503,7 +503,7 @@
                     $.each(files, function (i, field) {
                         var suffix = field.name.substring(field.name.lastIndexOf('.') + 1);
                         if ($.inArray(getFileType(suffix), config.types) < 0) {
-                            Dcat.error('对不起，不允许选择此类型文件');
+                            Dcat.error('This type of file is not allowed');
                             isUpload = false;
                             return false;
                         }
@@ -542,9 +542,9 @@
 
 
             var html = '<div class="col-3 col-sm-3 border-right">';
-            html += '<button type="button" class="btn btn-primary btn-block grid-refresh btn-mini btn-outline mb-1 media_selector_add_group"><i class="feather icon-plus"></i> 添加分组</button>';
+            html += '<button type="button" class="btn btn-primary btn-block grid-refresh btn-mini btn-outline mb-1 media_selector_add_group"><i class="feather icon-plus"></i> Add Group</button>';
             html += '<div class="list-group list-group-flush media_selector_media_group">';
-            html += '<a class="list-group-item list-group-item-action active" data-toggle="list" data-id="0" href="javascript:;">全部</a>';
+            html += '<a class="list-group-item list-group-item-action active" data-toggle="list" data-id="0" href="javascript:;">All</a>';
             for (var key1 in grouplist) {
                 html += '<a class="list-group-item list-group-item-action menu" data-toggle="list" data-id="' + key1 + '" href="javascript:;">' + grouplist[key1] + '</a>';
             }
@@ -565,16 +565,16 @@
             html += '<div class="filter-input col-sm-3">';
             html += '<div class="form-group">';
             html += '<div class="input-group input-group-sm">';
-            html += '<div class="input-group-prepend"><span class="input-group-text bg-white text-capitalize"><b>名称</b></span></div>';
-            html += '<input type="text" class="form-control" name="media_selector_name" placeholder="名称">';
+            html += '<div class="input-group-prepend"><span class="input-group-text bg-white text-capitalize"><b>Name</b></span></div>';
+            html += '<input type="text" class="form-control" name="media_selector_name" placeholder="Name">';
             html += '</div>';
             html += '</div>';
             html += '</div>';
             html += '<div class="filter-input col-sm-3">';
             html += '<div class="form-group">';
             html += ' <div class="input-group input-group-sm">';
-            html += '<div class="input-group-prepend"><span class="input-group-text bg-white text-capitalize"><b>类型</b></span></div>';
-            html += '<select class="form-control media_selector_type" style="width: 100%;" tabIndex="-1" aria-hidden="true" data-placeholder="类型">';
+            html += '<div class="input-group-prepend"><span class="input-group-text bg-white text-capitalize"><b>Type</b></span></div>';
+            html += '<select class="form-control media_selector_type" style="width: 100%;" tabIndex="-1" aria-hidden="true" data-placeholder="Type">';
             html += '<option value=""></option>';
             for (var key2 in selectList) {
                 html += '<option value="' + key2 + '">' + selectList[key2] + '</option>';
@@ -584,7 +584,7 @@
             html += '</div>';
             html += '</div>';
             html += '<div class="btn-group" style="height: fit-content">';
-            html += '<button type="button"  class="btn btn-primary grid-refresh btn-mini btn-sm btn-outline media_selector_search"><i class="feather icon-search"></i> 搜索</button>';
+            html += '<button type="button"  class="btn btn-primary grid-refresh btn-mini btn-sm btn-outline media_selector_search"><i class="feather icon-search"></i> Search</button>';
             html += '</div>';
             html += '</div>';
             html += '</div>';
