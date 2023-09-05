@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ":8ю1",
+    "php": "^8.1",
     "mikha-dev/dcat-admin": "*",
     "intervention/image": "^2.5"
   },
@@ -33,5 +33,5 @@
       ]
     }
   },
-  "minimum-stability": "beta"
+  "minimum-stability": "dev"
 }
